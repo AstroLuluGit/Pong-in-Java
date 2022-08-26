@@ -11,6 +11,10 @@ public class Window extends JFrame implements KeyListener {
     public int width = 700, height = 700;
     public boolean gameStarted = false;
     public Timer timer;
+    private boolean leftUpPressed = false;
+    private boolean leftDownPressed = false;
+    private boolean rightUpPressed = false;
+    private boolean rightDownPressed = false;
 
     public void drawWindow(String title) {
         setTitle(title);
@@ -31,6 +35,20 @@ public class Window extends JFrame implements KeyListener {
                 label.getBall().setSpeed(5);
                 label.getBall().initLabel(label);
                 label.getBall().moveBall(that);
+
+                if (rightUpPressed) {
+                    label.movePaddle(Paddle.MovementDirection.UP, 2);
+                }
+                if (rightDownPressed) {
+                    label.movePaddle(Paddle.MovementDirection.DOWN, 2);
+                }
+                if (leftUpPressed) {
+                    label.movePaddle(Paddle.MovementDirection.UP, 1);
+                }
+                if (leftDownPressed) {
+                    label.movePaddle(Paddle.MovementDirection.DOWN, 1);
+                }
+
             }
         };
 
@@ -38,40 +56,50 @@ public class Window extends JFrame implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
+    public void keyTyped(KeyEvent e) {}
 
     @Override
     public void keyPressed(KeyEvent e) {
+
         int key = e.getKeyCode();
+
         if (key == KeyEvent.VK_UP) {
-            label.movePaddle(Paddle.MovementDirection.UP, 2);
-            repaint();
+            rightUpPressed = true;
         }
         if (key == KeyEvent.VK_DOWN) {
-            label.movePaddle(Paddle.MovementDirection.DOWN, 2);
-            repaint();
+            rightDownPressed = true;
         }
         if (key == KeyEvent.VK_W) {
-            label.movePaddle(Paddle.MovementDirection.UP, 1);
-            repaint();
+            leftUpPressed = true;
         }
         if (key == KeyEvent.VK_S) {
-            label.movePaddle(Paddle.MovementDirection.DOWN, 1);
-            repaint();
+            leftDownPressed = true;
         }
         if (key == KeyEvent.VK_SPACE) {
-            if (gameStarted) return;
-            gameStarted = true;
-            initBall();
-            timer.start();
-            System.out.println("Paddle 1 Score is " + label.getPaddle1().score);
-            System.out.println("Paddle 2 Score is " + label.getPaddle2().score);
+            if (gameStarted) { label.resetGame();} else {
+
+                gameStarted = true;
+                initBall();
+                timer.start();
+            }
 
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+        if (key == KeyEvent.VK_UP) {
+            rightUpPressed = false;
+        }
+        if (key == KeyEvent.VK_DOWN) {
+            rightDownPressed = false;
+        }
+        if (key == KeyEvent.VK_W) {
+            leftUpPressed = false;
+        }
+        if (key == KeyEvent.VK_S) {
+            leftDownPressed = false;
+        }
     }
 }

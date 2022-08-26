@@ -41,17 +41,19 @@ public class Paddle extends JPanel {
         if (pad != null) return pad.intersects(x, y, width, height);
         return true;
     }
-
+    public void resetPaddle() {
+        y = 280;
+    }
     public void movePaddle(MovementDirection direction) {
         switch (direction) {
             case UP:
-                y -= 10;
+                y -= 10 * 0.6;
                 if (y < 0) {
                     y = 0;
                 }
                 break;
             case DOWN:
-                y += 10;
+                y += 10 * 0.6;
                 if (y > 560) {
                     y = 560;
                 }

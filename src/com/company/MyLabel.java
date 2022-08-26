@@ -24,8 +24,10 @@ public class MyLabel extends JLabel {
     public void movePaddle(Paddle.MovementDirection direction, int id) {
         if (id == 1) {
             paddle1.movePaddle(direction);
+            repaint();
         } else {
             paddle2.movePaddle(direction);
+            repaint();
         }
 
     }
@@ -34,10 +36,13 @@ public class MyLabel extends JLabel {
         window.gameStarted = false;
         window.timer.stop();
         ball.resetBall();
-        this.ball.setRotation(newBallRotation());
+
+        paddle2.resetPaddle();
+
+        this.ball.setRotation(200);
     }
     public int newBallRotation() {
-        return ThreadLocalRandom.current().nextInt(0, 360 +1);
+        return ThreadLocalRandom.current().nextInt(10, 340 +1);
     }
 
     @Override

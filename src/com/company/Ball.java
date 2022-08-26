@@ -50,16 +50,17 @@ public class Ball {
         boolean paddle1Collision = paddle1.checkIntersection(x, y, width, height);
         boolean paddle2Collision = paddle2.checkIntersection(x, y, width, height);
         if (paddle1Collision) {
-            calculateNewRotation("paddle");
+            // TODO: Add Different bounce angles depending on where ball hits paddle
+            calculateNewRotation("paddle1");
             x += 10;
         }
         if (paddle2Collision) {
-            calculateNewRotation("paddle");
+            calculateNewRotation("paddle2");
             x -= 10;
         }
-        if (y <= 10) {
+        if (y <= 5) {
             calculateNewRotation("wall");
-            y += 11;
+            y += 10;
         }
         if (y >= 640) {
             calculateNewRotation("wall");
@@ -67,7 +68,7 @@ public class Ball {
             System.out.println("Hit bottom wall");
         }
 
-        if (x < 0) {
+        if (x <= 10) {
             label.resetGame();
             resetBall();
             paddle2.score += 1;
@@ -80,13 +81,37 @@ public class Ball {
     }
 
     public void calculateNewRotation(String place) {
-        if (place == "paddle") {
-            System.out.println(rotation);
-            rotation = 180 - rotation;
-            System.out.println(rotation);
+        // FIXME: setting new rotation depending on where it hit the paddle very buggy
+        if (place == "paddle1") {
+            int relativeHitPosition = (label.getPaddle1().y - y) * (-1);
+            System.out.println("Hitted at " + relativeHitPosition);
+            if ((relativeHitPosition >= -10) && (relativeHitPosition <= 45)) {
+                rotation += 130;
+            } else if ((relativeHitPosition > 45) && (relativeHitPosition <= 55)) {
+                rotation = 0;
+            } else if ( relativeHitPosition > 55 && relativeHitPosition <= 110) {
+                rotation += 200;
+                System.out.println("Works");
+            } else {
+                rotation += 180;
+            }
+        }
+        if (place == "paddle2") {
+            int relativeHitPosition = (label.getPaddle2().y - y) * (-1);
+            System.out.println("Hitted 2 at " + relativeHitPosition);
+            if ((relativeHitPosition >= -10) && (relativeHitPosition <= 45)) {
+                rotation -= 200;
+            } else if ((relativeHitPosition > 45) && (relativeHitPosition <= 55)) {
+                rotation = 180;
+            } else if ( relativeHitPosition > 55 && relativeHitPosition <= 110) {
+                rotation -= 130;
+            } else {
+                rotation += 180;
+            }
         }
         if (place == "wall") {
             rotation = 0 - rotation;
+            System.out.println("hit");
         }
     }
 
